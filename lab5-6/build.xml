@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="PrimeLibrary" default="run" basedir=".">
+
+    <description>
+        Скрипт сборки для библиотеки простых чисел с GUI на Swing.
+    </description>
+
+    <property name="src.dir" value="src"/>
+    <property name="build.dir" value="build"/>
+    <property name="classes.dir" value="${build.dir}/classes"/>
+    <property name="jar.dir" value="${build.dir}/jar"/>
+    <property name="jar.name" value="PrimeLibrary.jar"/>
+    <property name="main.class" value="Main"/>
+
+    <target name="clean" description="Удаляет скомпилированные файлы">
+        <delete dir="${build.dir}"/>
+        <echo message="Папка build удалена"/>
+    </target>
+
+    <target name="init" description="Создаёт папки для сборки">
+        <mkdir dir="${classes.dir}"/>
+        <mkdir dir="${jar.dir}"/>
+        <echo message="Папки созданы"/>
+    </target>
+
+    <target name="compile" depends="init" description="Компилирует исходники">
+        <javac srcdir="${src.dir}" destdir="${classes.dir}"
+               includeantruntime="false"
+               encoding="UTF-8"
+               debug="true">
+        </javac>
+        <echo message="Компиляция завершена"/>
+    </target>
+
+    <target name="jar" depends="compile" description="Создаёт исполняемый JAR">
+        <jar destfile="${jar.dir}/${jar.name}" basedir="${classes.dir}">
+            <manifest>
+                <attribute name="Main-Class" value="${main.class}"/>
+            </manifest>
+        </jar>
+        <echo message="JAR-файл создан: ${jar.dir}/${jar.name}"/>
+    </target>
+
+    <target name="run" depends="compile" description="Запускает программу">
+        <java classname="${main.class}" fork="true">
+            <classpath>
+                <pathelement path="${classes.dir}"/>
+            </classpath>
+        </java>
+    </target>
+
+    <target name="run-jar" depends="jar" description="Запускает программу из JAR">
+        <java jar="${jar.dir}/${jar.name}" fork="true"/>
+    </target>
+
+</project>
